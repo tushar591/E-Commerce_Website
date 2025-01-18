@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import courseRoute from "./routes/course.route.js";
+import userRoute from "./routes/user.route.js";
 
 const app = express();
 dotenv.config();
@@ -24,6 +25,7 @@ try {
   console.log("Error Connecting to DB");
 }
 
+await app.use("/api/v1/user", userRoute);
 await app.use("/api/v1/course", courseRoute);
 
 app.listen(port, () => {

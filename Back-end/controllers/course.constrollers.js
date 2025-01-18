@@ -56,3 +56,39 @@ export const UpdateCourse = async (req, res) => {
     console.log(error);
   }
 };
+
+export const DeleteCourse = async (req,res)=>{
+   const id = req.params.courseid;
+   const deleted = await Course.deleteOne({ _id: id });
+   if(deleted) res.send(201).json({message : "Successfully Deleted !"});
+   else res.send(404).json({error : "Error in Deletion of Block"});
+};
+
+export const getCourse = async (req,res)=>{
+  try {
+    const courses = await Course.find({});
+    if (courses) {
+      return res.status(201).json({ message: "Fetched all courses successfully", courses });
+    } else {
+      return res.status(200).json({ message: "No courses found" });
+    }
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return res.status(500).json({ message: "Error fetching courses from the database" });
+  }
+  
+};
+
+export const courseDetails = async (req,res) =>{
+   const id = req.params.courseid;
+   try {
+    const result = await Course.findById(id);
+    if (result) {
+      return res.status(201).json({ message: "Fetched the data", result });
+    } else {
+      return res.status(404).json({ message: "Can't fetch the data" }); 
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Data Not Available in DB", error });
+  }
+};
