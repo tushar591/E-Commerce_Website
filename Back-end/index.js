@@ -26,7 +26,7 @@ try {
 }
 
 await app.use("/api/v1/user", userRoute);
-await app.use("/api/v1/course", courseRoute);
+await app.use("/api/v1/course", courseRoute);   
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
