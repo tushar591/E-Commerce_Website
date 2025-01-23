@@ -55,8 +55,8 @@ export const SignUp = async (req, res) => {
 export const Login = async (req, res) => {
   const Email = req.body.Email;
   const Password = req.body.Password;
-
-  try {
+      
+  try {   
     const user = await User.findOne({ Email });
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
@@ -69,7 +69,7 @@ export const Login = async (req, res) => {
       .status(401)
       .json({ message: "Incorrect username and password" });
     } else {
-      console.log("Passed");
+      //console.log(config.JWT_USER_PASSWORD);
       const token = jwt.sign(
         {
           id: user._id,
