@@ -83,3 +83,13 @@ export const Login = async (req, res) => {
     return res.status(400).json({ error: "Error in MongoDB" });
   }
 };
+
+export const Logout = async (req,res)=>{
+  try {
+    res.clearCookie("jwt");
+    res.status(200).json({message : "Logout Successfully!"});    
+  } catch (error) {
+    res.status(500).json({error : "Error while logging out",error});
+    console.log("Error while logging out");
+  }
+};

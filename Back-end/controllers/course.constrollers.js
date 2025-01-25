@@ -1,4 +1,5 @@
 import { Course } from "../models/course.model.js";
+import { Purchase } from "../models/purchase.model.js";
 
 
 export const createCourse = async (req, res) => {
@@ -92,4 +93,27 @@ export const courseDetails = async (req,res) =>{
   } catch (error) {
     return res.status(500).json({ message: "Data Not Available in DB", error });
   }
+};
+
+export const buyCourse = async (req,res)=>{
+   const {userId} = req;
+   const {courseId} = req.params;
+
+   try {
+    const course = await Course.findById({courseId});
+    if(!courseId){
+      return res.status(401).json({message : "No course found"});
+    }
+    const existingPurchase = Purchase.find({userId,courseId});
+    if(existingPurchase){
+      return res.status(401).json({message : "The course is already purchased"});
+    }
+
+    const newCourse = new Purchase({userId,courseId});
+    await newCourse.save();
+    return res.status(201).json({message : "Course purchased Successfully!"});
+   } catch (error) {
+      return res.status(401).json({error : "Error while verifying course",error});
+   }
+  
 };
