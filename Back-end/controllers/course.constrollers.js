@@ -96,15 +96,15 @@ export const courseDetails = async (req,res) =>{
 };
 
 export const buyCourse = async (req,res)=>{
-   const {userId} = req;
-   const {courseId} = req.params;
-
+  const {userId} = req;
+  const {courseId} = req.params;
    try {
-    const course = await Course.findById({courseId});
-    if(!courseId){
-      return res.status(401).json({message : "No course found"});
-    }
-    const existingPurchase = Purchase.find({userId,courseId});
+     const course = await Course.findById(courseId);
+     
+     if(!course){
+       return res.status(401).json({message : "No course found"});
+      }
+    const existingPurchase = await Purchase.findOne({userId,courseId});
     if(existingPurchase){
       return res.status(401).json({message : "The course is already purchased"});
     }
@@ -117,3 +117,4 @@ export const buyCourse = async (req,res)=>{
    }
   
 };
+
