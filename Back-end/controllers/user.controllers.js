@@ -4,6 +4,8 @@ import { mongo } from "mongoose";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
 import config from "../config.js";
+import { Purchase } from "../models/purchase.model.js";
+import { Course } from "../models/course.model.js";
 
 export const SignUp = async (req, res) => {
   const { FirstName, LastName, Email, Password } = req.body;
@@ -92,4 +94,25 @@ export const Logout = async (req,res)=>{
     res.status(500).json({error : "Error while logging out",error});
     console.log("Error while logging out");
   }
+};
+
+export const Purchases = async (req,res)=>{
+  const userId = req.userId;
+
+  try {
+    const purchased_courses = await Purchase.find({userId});
+    const Purchased = [];
+    for(let i = 0; i<purchased_courses.length; i++){
+      Purchased.push(purchased_courses[i].courseId);
+      console.log(purchased_courses[i].courseId);
+    }
+    
+    const  Course_Data = await Course.find({
+      _id : {$in : Purchased},
+    });
+     res.status(200).json({Purchased,Course_Data});
+   } catch (error) {
+     res.status(500).json({message : "Error while taking course",error});
+   }
+
 };
