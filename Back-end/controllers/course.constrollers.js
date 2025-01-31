@@ -108,7 +108,7 @@ export const buyCourse = async (req,res)=>{
     if(existingPurchase){
       return res.status(401).json({message : "The course is already purchased"});
     }
-
+    console.log(courseId);
     const newCourse = new Purchase({userId,courseId});
     await newCourse.save();
     return res.status(201).json({message : "Course purchased Successfully!"});
