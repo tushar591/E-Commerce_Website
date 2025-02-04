@@ -1,4 +1,4 @@
-import { admin } from "../models/admin.model.js";
+import {admin} from "../models/admin.model.js";
 import bcrypt from "bcryptjs";
 import { mongo } from "mongoose";
 import { z } from "zod";
@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 import config from "../config.js";
 
 export const SignUp = async (req, res) => {
-    console.log("entered");
   const { FirstName, LastName, Email, Password } = req.body;
 
   const adminSchema = z.object({
@@ -56,14 +55,14 @@ export const SignUp = async (req, res) => {
 export const Login = async (req, res) => {
   const Email = req.body.Email;
   const Password = req.body.Password;
-      
+  
   try {   
-    const admin = await admin.findOne({ Email });
-    if (!admin) {
+    const Admin = await admin.findOne({ Email });
+    if (!Admin) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
-    
-    const founded = await bcrypt.compare(Password, admin.Password);
+
+    const founded = await bcrypt.compare(Password, Admin.Password);
     
     if (!founded) {
       return res
@@ -86,6 +85,9 @@ export const Login = async (req, res) => {
 
 export const Logout = async (req,res)=>{
   try {
+    if(!req.cookies.jwt){
+      return res.status(204).json({message : "No token found"});
+    } 
     res.clearCookie("jwt");
     res.status(200).json({message : "Logout Successfully!"});    
   } catch (error) {

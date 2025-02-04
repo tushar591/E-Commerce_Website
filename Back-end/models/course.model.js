@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const courseSchema = new mongoose.Schema({
   title: {
@@ -17,6 +17,11 @@ const courseSchema = new mongoose.Schema({
     type : String,
     required : true
   },
+  creatorId: {
+    type: mongoose.Types.ObjectId,
+    ref: "admin",
+    required: true
+  }
 });
 
 export const Course = mongoose.model("Course",courseSchema);
