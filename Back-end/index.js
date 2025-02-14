@@ -5,12 +5,18 @@ import courseRoute from "./routes/course.route.js";
 import userRoute from "./routes/user.route.js";
 import adminRoute from "./routes/admin.route.js";
 import cookie from "cookie-parser";
+import cors from "cors";
+
 
 const app = express();
 dotenv.config();
 
 app.use(express.json());
 app.use(cookie());
+app.use(cors({ 
+  credentials: true, 
+  origin: "http://localhost:5173" }));
+
 // app.use(
 //   fileUpload({
 //     useTempFiles: true,

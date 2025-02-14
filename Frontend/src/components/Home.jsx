@@ -1,11 +1,72 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../public/wp5231557.jpg";
 import { Link } from "react-router-dom";
 import { FaInstagramSquare } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
+import axios from "axios";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 export default function Home() {
+  var [course, setCourse] = React.useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:4001/api/v1/course/courses",
+          {
+            withCredentials: true,
+          }
+        );
+        setCourse(response.data.courses);
+      } catch (err) {
+        console.log("Error occured while fetching Data", err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  var settings = {
+    vertical : false,
+    verticalSwiping: false,
+    dots: true,
+    infinite: true,
+    speed: 2000,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    autoplay: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
   return (
     <div className="bg-gradient-to-r from-black to-blue-950">
       <div className="h-screen text-white container mx-auto">
@@ -45,10 +106,40 @@ export default function Home() {
             Courses Videos
           </button>
         </section>
-        <section>Section2</section>
 
+        {/*SLIDER*/}
+        <section>
+            <Slider {...settings}>
+            {course.map((item) => (
+            <div className="slider-container">
+              <div>
+                <div className="">
+                    <div key={item.id} className="p-4">
+                     <div className="bg-gray-800 rounded-lg oveflow-hidden relative flex-shrink-0 w-92 transition-transform duration-500">
+                     <img
+                        src={item.image}
+                        alt=""
+                        className="h-32 w-full object-contain"
+                      ></img>
+                      <div className="p-6 text-center">
+                        <h1>{item.title}</h1>
+                        <button className="m-4 p-2 rounded-full text-center border bg-orange-500 text-white font-semibold hover:bg-white hover:text-black">
+                          Enroll Now
+                        </button>
+                      </div>
+                     </div>
+                    </div>
+                  
+                </div>
+              </div>
+          </div>
+          ))}
+            </Slider>
+        </section>
+
+        <hr></hr>
         {/*FOOTER*/}
-        <footer>
+        <footer className="mt-5">
           <div className="text-center grid grid-cols-3 md:grid-col-1">
             <div>
               <div className="flex justify-center space-x-2 m-3">
@@ -84,7 +175,20 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div>right</div>
+            <div>
+              <h1 className="font-bold mb-2">Copyright &#169; 2025</h1>
+              <div>
+                <p className="text-gray-500 hover:cursor-pointer hover:text-white">
+                  Terms and Conditions
+                </p>
+                <p className="text-gray-500 hover:cursor-pointer hover:text-white">
+                  Privacy Policy
+                </p>
+                <p className="text-gray-500 hover:cursor-pointer hover:text-white">
+                  Refund & Cancellation
+                </p>
+              </div>
+            </div>
           </div>
         </footer>
       </div>
