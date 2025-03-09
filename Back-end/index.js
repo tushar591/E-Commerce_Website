@@ -15,7 +15,20 @@ app.use(express.json());
 app.use(cookie());
 app.use(cors({ 
   credentials: true, 
-  origin: "http://localhost:5173" }));
+  origin: "http://localhost:5173",  
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+})
+);
+
+
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(200);
+});
 
 // app.use(
 //   fileUpload({
@@ -24,7 +37,7 @@ app.use(cors({
 //   })
 // );
 
-const port = process.env.port || 3000;
+const port = process.env.port || 4002;
 const DB_URI = process.env.MONGO_URI;
 
 try {
