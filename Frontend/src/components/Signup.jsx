@@ -2,41 +2,43 @@ import React, { useState } from "react";
 import logo from "../../public/wp5231557.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
   export default function Signup() {
 
-      const [email, setEmail] = useState("");
-      const [password, setPassword] = useState("");
-      const [firstName, setFirstName] = useState("");
-      const [lastName, setLastName] = useState("");
+      const [Email, setEmail] = useState("");
+      const [Password, setPassword] = useState("");
+      const [FirstName, setFirstName] = useState("");
+      const [LastName, setLastName] = useState("");
       const [errorMessage, setErrorMessage] = useState("");
 
       const navigate = useNavigate();
 
       const handleSubmit = async (e) => {
+        
         e.preventDefault();
     
         try {
           const response = await axios.post(
             "http://localhost:4001/api/v1/user/signup", 
-            JSON.stringify({
-              firstName,
-              lastName,
-              email,
-              password,
-            }),
+            {
+              FirstName,
+              LastName,
+              Email,
+              Password,
+            },
             {
               withCredentials: true,
               headers: {
                 "Content-Type": "application/json",
               },
             }
-          );
-          console.log("Signup successful: ");
+          );          
           toast.success(response.data.message);
           navigate("/login");
         } catch (error) {
           if (error.response) {
+            toast.error(error.response.data.message);
             setErrorMessage(error.response.data.errors || "Signup failed!!!");
           }
         }
@@ -86,7 +88,7 @@ import axios from "axios";
                 <input
                   type="text"
                   id="firstname"
-                  value={firstName}
+                  value={FirstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   className="w-full p-3 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Type your firstname"
@@ -99,7 +101,7 @@ import axios from "axios";
                 <input
                   type="text"
                   id="lastname"
-                  value={lastName}
+                  value={LastName}
                   onChange={(e) => setLastName(e.target.value)}
                   className="w-full p-3 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Type your lastname"
@@ -114,7 +116,7 @@ import axios from "axios";
                 <input
                   type="text"
                   id="email"
-                  value={email}
+                  value={Email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full p-3 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="name@email.com"
@@ -129,7 +131,7 @@ import axios from "axios";
                   <input
                     type="password"
                     id="password"
-                    value={password}
+                    value={Password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full p-3 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="********"

@@ -7,20 +7,24 @@ import adminRoute from "./routes/admin.route.js";
 import cookie from "cookie-parser";
 import cors from "cors";
 
-
 const app = express();
 dotenv.config();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookie());
 app.use(cors({ 
   credentials: true, 
   origin: "http://localhost:5173",  
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-})
-);
+}));
 
+// app.use((req, res, next) => {
+//   console.log(`Incoming Request: ${req.method} ${req.url}`);
+//   console.log("Request Body:", req.body);
+//   next();
+// });
 
 app.options("*", (req, res) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:5173");
@@ -30,27 +34,24 @@ app.options("*", (req, res) => {
   res.sendStatus(200);
 });
 
-// app.use(
-//   fileUpload({
-//     useTempFiles: true,
-//     tempFileDir: "/tmp/",
-//   })
-// );
-
-const port = process.env.port || 4002;
+const port = process.env.PORT || 4002;
 const DB_URI = process.env.MONGO_URI;
 
-try {
-  await mongoose.connect(DB_URI);
-  console.log("Connected to MongoDB");
-} catch (error) {
-  console.log("Error Connecting to DB");
-}
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/course", courseRoute);   
+app.use("/api/v1/admin", adminRoute);   
 
-await app.use("/api/v1/user", userRoute);
-await app.use("/api/v1/course", courseRoute);   
-await app.use("/api/v1/admin", adminRoute);   
+const startServer = async () => {
+  try {
+    await mongoose.connect(DB_URI);
+    console.log("Connected to MongoDB");
 
-app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
-});
+    app.listen(port, () => {
+      console.log(`Server is running on port: ${port}`);
+    });
+  } catch (error) {
+    console.log("Error Connecting to DB:", error);
+  }
+};
+
+startServer();

@@ -8,9 +8,34 @@ import axios from "axios";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { use } from "react";
+import { toast } from "react-hot-toast";
 
 export default function Home() {
   var [course, setCourse] = React.useState([]);
+  var [loggedin, setLoggedIn] = React.useState(false);
+
+  useEffect(() => {
+     if(localStorage.getItem("token")){
+       setLoggedIn(true);
+     }
+     else {
+       setLoggedIn(false);
+     }
+  },[]);
+
+  const handlelogout = async ()=> {
+    try {
+      const response = axios.get("http://localhost:4001/api/v1/user/logout", {
+        withCredentials: true,
+      })
+      console.log(response);
+      toast.success("Successfully logged out");
+      setLoggedIn(false);
+    } catch (error) {
+      toast.error("Error while logging out");
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,7 +104,16 @@ export default function Home() {
             </h1>
           </div>
           <div className="flex space-x-2 justify-center">
-            <Link to={"/login"} className="bg-transparent border-2 rounded p-1">
+            {(loggedin) ? (
+              <button
+                className="m-4 p-2 rounded text-center border bg-white text-black font-semibold hover:bg-red-600 hover:text-white"
+                onClick={handlelogout}
+              >
+                Logout
+              </button>
+            ) : (
+              <div>
+                <Link to={"/login"} className="bg-transparent border-2 rounded p-1">
               Login
             </Link>
             <Link
@@ -88,6 +122,8 @@ export default function Home() {
             >
               Signup
             </Link>
+              </div>
+            )}
           </div>
         </header>
 
