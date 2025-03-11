@@ -10,6 +10,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { use } from "react";
 import { toast } from "react-hot-toast";
+import Courses from "./Courses";
+import Coursesvdos from "./Coursesvdos";
 
 export default function Home() {
   var [course, setCourse] = React.useState([]);
@@ -128,19 +130,19 @@ export default function Home() {
         </header>
 
         {/*SECTION*/}
-        <section className="text-center">
-          <h1 className="text-orange-500 text-3xl font-lightbold p-3">
+        <section className="text-center max-h-500">
+          <h1 className="text-orange-500 text-3xl font-lightbold">
             Course Heaven
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-400 p-5">
             Upskill Yourself By Under The Guidance of Experts
           </p>
-          <button className="m-4 p-2 rounded text-center border bg-green-500 text-white font-semibold hover:bg-white hover:text-black">
+          <Link to={"/courses"} className="mt-4 m-4 p-2 rounded text-center border bg-green-500 text-white font-semibold hover:bg-white hover:text-black">
             Explore Courses
-          </button>
-          <button className="m-4 p-2 rounded text-center border bg-white text-black font-semibold hover:bg-green-500 hover:text-white">
+          </Link>
+          <Link to={"/coursesvdos"} className="m-4 p-2 rounded text-center border bg-white text-black font-semibold hover:bg-green-500 hover:text-white">
             Courses Videos
-          </button>
+          </Link>
         </section>
 
         {/*SLIDER*/}
@@ -178,7 +180,7 @@ export default function Home() {
         <footer className="mt-5">
           <div className="text-center grid grid-cols-3 md:grid-col-1">
             <div>
-              <div className="flex justify-center space-x-2 m-3">
+              <div className="flex justify-center space-x-2">
                 <img src={logo} alt="" className="h-5 w-5 rounded-full"></img>
                 <h1 className="text-1xl font-bold text-orange-500">
                   Course Heaven
