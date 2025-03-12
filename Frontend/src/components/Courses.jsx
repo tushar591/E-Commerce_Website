@@ -40,7 +40,7 @@ function Courses() {
             withCredentials: true,
           }
         );
-        console.log(response.data.courses);
+        //console.log(response.data.courses);
         setCourses(response.data.courses);
         setLoading(false);
       } catch (err) {

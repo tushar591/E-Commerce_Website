@@ -107,11 +107,12 @@ export const courseDetails = async (req, res) => {
 export const buyCourse = async (req, res) => {
   const { userId } = req;
   const { courseId } = req.params;
+  //console.log(userId);
   try {
     const course = await Course.findById(courseId);
 
     if (!course) {
-      return res.status(401).json({ message: "No course found" });
+      return res.status(404).json({ message: "No course found" });
     }
     const existingPurchase = await Purchase.findOne({ userId, courseId });
     if (existingPurchase) {
