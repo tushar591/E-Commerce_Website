@@ -105,7 +105,6 @@ export const Purchases = async (req, res) => {
     const purchasedCourseIds = [];
 
     for(let i = 0; i<purchasedCourses.length;i++){
-      console.log(purchasedCourses[i].courseId);
       purchasedCourseIds.push(purchasedCourses[i].courseId);
     }
     const courseData = await Course.find({ _id: { $in: purchasedCourseIds } });

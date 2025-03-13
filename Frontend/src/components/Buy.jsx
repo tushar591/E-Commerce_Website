@@ -36,6 +36,7 @@ export default function Buy() {
       else{
         toast.error(error?.response?.data?.message);
       }
+      navigate("/purchases");
     }
 
   }

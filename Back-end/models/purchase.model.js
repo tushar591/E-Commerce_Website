@@ -5,7 +5,7 @@ const PurchaseSchema = new mongoose.Schema({
     type : mongoose.Types.ObjectId,
     ref:"User",
   },
-  ObjectId:{
+  courseId:{
     type : mongoose.Types.ObjectId,
     ref:"Course",
   },

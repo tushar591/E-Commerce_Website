@@ -10,6 +10,6 @@ router.post("/login",Login);
 
 router.get("/logout",Logout);
 
-router.get("/purchases",userMiddleware,Purchases);
+router.post("/purchases",userMiddleware,Purchases);
 
 export default router; 
