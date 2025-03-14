@@ -4,9 +4,9 @@ import { admin } from "../models/admin.model.js";
 
 export const createCourse = async (req, res) => {
   const { title, description, price, image } = req.body;
-  const Admin = await admin.findById(req.adminId); 
-  if(!Admin){
-    return res.sendStatus(404).json({message : "Admin token not provided"});
+  const Admin = await admin.findById(req.adminId);
+  if (!Admin) {
+    return res.sendStatus(404).json({ message: "Admin token not provided" });
   }
   try {
     if (!title || !description || !price || !image) {
@@ -30,7 +30,7 @@ export const createCourse = async (req, res) => {
     });
   } catch (error) {
     console.log("Error creating course:", error);
-    res.status(500).json({ error: "Error creating course",error});
+    res.status(500).json({ error: "Error creating course", error });
   }
 };
 
@@ -104,6 +104,10 @@ export const courseDetails = async (req, res) => {
   }
 };
 
+import Stripe from "stripe";
+import config from "../config.js";
+const stripe = new Stripe(config.STRIPE_KEY);
+//console.log(stripe);
 export const buyCourse = async (req, res) => {
   const { userId } = req;
   const { courseId } = req.params;
@@ -121,9 +125,22 @@ export const buyCourse = async (req, res) => {
         .json({ message: "The course is already purchased" });
     }
     //console.log(courseId);
+    const amount = course.price;
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: "usd",
+      payment_method_types: ["card"],
+    });
     const newCourse = new Purchase({ userId, courseId });
     await newCourse.save();
-    return res.status(201).json({ message: "Course purchased Successfully!" });
+    console.log("entered");
+    return res
+      .status(201)
+      .json({
+        message: "Course purchased Successfully!",
+        course,
+        paymentIntent,
+      });
   } catch (error) {
     return res
       .status(401)
