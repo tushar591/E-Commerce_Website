@@ -133,7 +133,7 @@ export const buyCourse = async (req, res) => {
     });
     const newCourse = new Purchase({ userId, courseId });
     await newCourse.save();
-    console.log("entered");
+   // console.log("entered");
     return res
       .status(201)
       .json({
