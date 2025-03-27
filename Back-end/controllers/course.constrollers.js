@@ -133,13 +133,13 @@ export const buyCourse = async (req, res) => {
     });
     const newCourse = new Purchase({ userId, courseId });
     await newCourse.save();
-   // console.log("entered");
+    //console.log(paymentIntent);
     return res
       .status(201)
       .json({
         message: "Course purchased Successfully!",
         course,
-        paymentIntent,
+        clientSecret: paymentIntent.client_secret,
       });
   } catch (error) {
     return res

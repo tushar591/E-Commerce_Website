@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import courseRoute from "./routes/course.route.js";
 import userRoute from "./routes/user.route.js";
 import adminRoute from "./routes/admin.route.js";
+import orderRoute from "./routes/order.route.js";
 import cookie from "cookie-parser";
 import cors from "cors";
 
@@ -40,6 +41,7 @@ const DB_URI = process.env.MONGO_URI;
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/course", courseRoute);   
 app.use("/api/v1/admin", adminRoute);   
+app.use("/api/v1/order", orderRoute);
 
 const startServer = async () => {
   try {

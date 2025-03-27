@@ -16,6 +16,7 @@ export default function Buy() {
   const [paymentdata, setpaymentdata] = useState("");
   const [errormessage, setErrorMessage] = useState("");
   const [carderror, setcarderror] = useState("");
+  const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
     const handlebuydata = async () => {
@@ -36,9 +37,10 @@ export default function Buy() {
             withCredentials: true,
           }
         );
-        //console.log(response.data);
+        //console.log("Response: ", response.data);
         setcoursedata(response.data.course);
         setpaymentdata(response.data.paymentIntent);
+        setClientSecret(response.data.clientSecret);
         setloading(false);
       } catch (error) {
         setloading(false);
@@ -56,14 +58,14 @@ export default function Buy() {
   const stripe = useStripe();
   const elements = useElements();
 
-  const handlebuy = async () => {
+  const handlebuy = async (event) => {
     event.preventDefault();
 
     if (!stripe || !elements) {
       console.log("Stripe or Element Error Detected");
       return;
     }
-    setloading(false);
+    setloading(true);
     const card = elements.getElement(CardElement);
 
     if (card == null) {
@@ -91,7 +93,7 @@ export default function Buy() {
     }
     
     const {paymentIntent, error:confirmerror} = await stripe.confirmCardPayment(
-      'clientSecret',
+      clientSecret,
       {
         payment_method: {
           card: card,
@@ -102,8 +104,9 @@ export default function Buy() {
       },
     );
     if(confirmerror){
+      console.log("Error 107"); 
       setcarderror(confirmerror.message);
-    }else if(paymentIntent.status === "succeeded"){
+    }else if(paymentIntent.status == "succeeded"){
       console.log("Payment Successfull",paymentIntent);
       setcarderror("your payment id :",paymentIntent.id);
       const paymentInfo={
@@ -112,8 +115,11 @@ export default function Buy() {
         amount : paymentIntent.amount,
         status : paymentIntent.status, 
       }
-      console.log(paymentInfo);
+      console.log("paymentInfo :" ,paymentInfo);
+      toast.success("Payment successfull");
+      navigate("/purchases");
     }
+    setloading(false);
   };
 
   return (
