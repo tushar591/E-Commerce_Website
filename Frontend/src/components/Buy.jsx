@@ -87,35 +87,50 @@ export default function Buy() {
       console.log("[PaymentMethod]", paymentMethod);
     }
 
-    if(!clientSecret){
-      setloading(false);    
+    if (!clientSecret) {
+      setloading(false);
       return;
     }
-    
-    const {paymentIntent, error:confirmerror} = await stripe.confirmCardPayment(
-      clientSecret,
-      {
+
+    const { paymentIntent, error: confirmerror } =
+      await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: card,
           billing_details: {
             name: token,
           },
         },
-      },
-    );
-    if(confirmerror){
-      console.log("Error 107"); 
+      });
+    if (confirmerror) {
+      console.log("Error 107");
       setcarderror(confirmerror.message);
-    }else if(paymentIntent.status == "succeeded"){
-      console.log("Payment Successfull",paymentIntent);
-      setcarderror("your payment id :",paymentIntent.id);
-      const paymentInfo={
-        courseId : courseId,
-        paymentId : paymentIntent.id,
-        amount : paymentIntent.amount,
-        status : paymentIntent.status, 
+    } else if (paymentIntent.status == "succeeded") {
+      console.log("Payment Successfull", paymentIntent);
+      setcarderror("your payment id :", paymentIntent.id);
+      const paymentInfo = {
+        courseId: courseId,
+        paymentId: paymentIntent.id,
+        amount: paymentIntent.amount,
+        status: paymentIntent.status,
+      };
+      console.log("paymentInfo :", paymentInfo);
+      try {
+        const response = axios.post(
+          "http://localhost:4001/api/v1/order",
+          paymentInfo,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+        console.log(response);
+      } catch (error) {
+        console.log("Error occured while creating order", error);
+        toast.error("Error occured while creating order");
       }
-      console.log("paymentInfo :" ,paymentInfo);
+
       toast.success("Payment successfull");
       navigate("/purchases");
     }
