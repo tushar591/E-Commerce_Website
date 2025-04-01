@@ -5,8 +5,9 @@ import { admin } from "../models/admin.model.js";
 export const createCourse = async (req, res) => {
   const { title, description, price, image } = req.body;
   const Admin = await admin.findById(req.adminId);
+  console.log(req);
   if (!Admin) {
-    return res.sendStatus(404).json({ message: "Admin token not provided" });
+    return res.status(404).json({ message: "Admin token not provided" });
   }
   try {
     if (!title || !description || !price || !image) {

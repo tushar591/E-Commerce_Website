@@ -55,7 +55,7 @@ export const SignUp = async (req, res) => {
 export const Login = async (req, res) => {
   const Email = req.body.Email;
   const Password = req.body.Password;
-  
+  //console.log("Received Login Request:", req.body);
   try {   
     const Admin = await admin.findOne({ Email });
     if (!Admin) {

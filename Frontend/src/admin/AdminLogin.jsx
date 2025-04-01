@@ -13,7 +13,7 @@ export default function AdminLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
       const response = await axios.post(
         "http://localhost:4001/api/v1/admin/login",
@@ -22,7 +22,7 @@ export default function AdminLogin() {
           Password,
         },
         {
-          withCredentials: true,
+          withCredentials: true,   
           headers: {
             "Content-Type": "application/json",
           },
