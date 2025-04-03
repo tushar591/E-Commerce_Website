@@ -4,8 +4,7 @@ import { admin } from "../models/admin.model.js";
 
 export const createCourse = async (req, res) => {
   const { title, description, price, image } = req.body;
-  const Admin = await admin.findById(req.adminId);
-  console.log(req);
+  const Admin = await admin.findById(req.headers.adminid);
   if (!Admin) {
     return res.status(404).json({ message: "Admin token not provided" });
   }
@@ -38,12 +37,13 @@ export const createCourse = async (req, res) => {
 export const UpdateCourse = async (req, res) => {
   const id = req.params.courseid;
   const AdminId = req.adminId;
-  const coursefound = await Course.find(id);
+  const coursefound = await Course.find({ _id: new mongoose.Types.ObjectId(id) });
   if (!coursefound) {
     res.status(201).json({ message: "Course Not found" });
   }
   var { title, description, price, image } = req.body;
-
+  
+ // console.log(req.body);
   try {
     const course = await Course.updateOne(
       {
@@ -107,6 +107,7 @@ export const courseDetails = async (req, res) => {
 
 import Stripe from "stripe";
 import config from "../config.js";
+import mongoose from "mongoose";
 const stripe = new Stripe(config.STRIPE_KEY);
 //console.log(stripe);
 export const buyCourse = async (req, res) => {
