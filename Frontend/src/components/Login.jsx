@@ -3,6 +3,7 @@ import logo from "../../public/wp5231557.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { BACKEND_URL } from "../../utils/utils.js";
 
 export default function Login() {
   const [Email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:4001/api/v1/user/login",
+        `${BACKEND_URL}/user/login`,
         {
           Email,
           Password,

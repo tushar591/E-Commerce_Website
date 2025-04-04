@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../../utils/utils.js";
 
 function CourseCreate() {
   const [title, setTitle] = useState("");
@@ -24,27 +25,33 @@ function CourseCreate() {
 
   const handleCreateCourse = async (e) => {
     e.preventDefault();
-    
+
     // const formData = new FormData();
     // formData.append("title", title);
     // formData.append("description", description);
     // formData.append("price", price);
     // formData.append("image", image);
 
-    const token = localStorage.getItem("admin");
-   
+    const admin = JSON.parse(localStorage.getItem("admin"));
+    const token = admin?.token;
+    const adminId = admin?.Admin._id;
+
     if (!token) {
+      toast.error("Please Login First");
       navigate("/admin/login");
       return;
     }
 
     try {
       const response = await axios.post(
-        "http://localhost:4001/api/v1/course/create",
-        title,
-        description,
-        price,
-        image,
+        `${BACKEND_URL}/course/create`,
+        {
+          title,
+          description,
+          price,
+          image,
+          adminId,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -61,7 +68,7 @@ function CourseCreate() {
       setImagePreview("");
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.errors);
+      toast.error("Error in creating course");
     }
   };
 

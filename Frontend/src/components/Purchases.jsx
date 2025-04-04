@@ -6,6 +6,7 @@ import { IoMdSettings } from "react-icons/io";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { RiHome2Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../utils/utils.js";
 
 export default function Purchases() {
   const [purchases, setpurchases] = useState([]);
@@ -37,7 +38,7 @@ export default function Purchases() {
 
       try {
         const response = await axios.post(
-          "http://localhost:4001/api/v1/user/purchases",
+          `${BACKEND_URL}/user/purchases`,
           {},
           {
             headers: {

@@ -1,20 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../public/wp5231557.jpg";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { BACKEND_URL } from "../../utils/utils.js";
 
 export default function Dashboard() {
-  const handlelogout = async ()=> {
+  const handlelogout = async () => {
     try {
-      const response = axios.get("http://localhost:4001/api/v1/user/logout", {
-        withCredentials: true,
-      })
-      console.log(response);
+      const response = await axios.post(`${BACKEND_URL}/admin/logout`);
+      localStorage.removeItem("admin");
       toast.success("Successfully logged out");
       setLoggedIn(false);
     } catch (error) {
       toast.error("Error while logging out");
+      console.error("Logout error:", error);
     }
-  }
+  };
 
   return (
     <div className="flex h-screen">

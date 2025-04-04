@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { BACKEND_URL } from '../../utils/utils.js';
 
 export default function UpdateCourse() {
 
@@ -18,7 +19,7 @@ export default function UpdateCourse() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(`http://localhost:4001/api/v1/course/${id}`);
+        const response = await axios.get(`${BACKEND_URL}/course/${id}`);
         console.log(response.data.result);
         setTitle(response.data.result.title);
         setDescription(response.data.result.description);
@@ -52,7 +53,10 @@ export default function UpdateCourse() {
     // formData.append("price", price);
     // formData.append("image", image);
 
-    const token = localStorage.getItem("admin");
+    const admin = JSON.parse(localStorage.getItem("admin"));
+    const token = admin?.token;
+    const adminId = admin?.Admin._id;
+    console.log(adminId);
     if(!token) {
       toast.error("Please login first");
       navigate("/admin/login");
@@ -60,8 +64,8 @@ export default function UpdateCourse() {
     }
 
     try {
-      const res = axios.put(`http://localhost:4001/api/v1/course/update/${id}`,{
-        title, description, price, image,
+      const res = axios.put(`${BACKEND_URL}/course/update/${id}`,{
+        title, description, price, image,adminId
       },
         {
         headers: {

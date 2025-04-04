@@ -3,6 +3,7 @@ import logo from "../../public/wp5231557.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { BACKEND_URL } from "../../utils/utils.js";
 
 export default function AdminLogin() {
   const [Email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function AdminLogin() {
     
     try {
       const response = await axios.post(
-        "http://localhost:4001/api/v1/admin/login",
+        `${BACKEND_URL}/admin/login`,
         {
           Email,
           Password,
@@ -28,7 +29,8 @@ export default function AdminLogin() {
           },
         }
       );
-      localStorage.setItem("admin", response.data.token);
+      console.log(response.data);
+      localStorage.setItem("admin", JSON.stringify(response.data));
       toast.success(response.data.message);
       navigate("/admin/dashboard");
     } catch (error) {

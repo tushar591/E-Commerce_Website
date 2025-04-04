@@ -3,13 +3,17 @@ import { Purchase } from "../models/purchase.model.js";
 import { admin } from "../models/admin.model.js";
 
 export const createCourse = async (req, res) => {
-  const { title, description, price, image } = req.body;
-  const Admin = await admin.findById(req.headers.adminid);
+  var { title, description, price, image,adminId } = req.body;
+  const Admin = await admin.findById(adminId);
   if (!Admin) {
     return res.status(404).json({ message: "Admin token not provided" });
   }
   try {
-    if (!title || !description || !price || !image) {
+    if(!image){
+       image = "img.jpg";
+    }
+
+    if (!title || !description || !price ) {
       return res
         .status(400)
         .json({ error: "One of the fields is not provided" });
@@ -20,7 +24,7 @@ export const createCourse = async (req, res) => {
       description,
       price,
       image,
-      creatorId: Admin._id,
+      creatorId: adminId,
     };
 
     const course = await Course.create(courseData);
@@ -36,14 +40,15 @@ export const createCourse = async (req, res) => {
 
 export const UpdateCourse = async (req, res) => {
   const id = req.params.courseid;
-  const AdminId = req.adminId;
+  const AdminId = req.body.adminId;
+ // console.log(AdminId);
   const coursefound = await Course.find({ _id: new mongoose.Types.ObjectId(id) });
   if (!coursefound) {
     res.status(201).json({ message: "Course Not found" });
   }
   var { title, description, price, image } = req.body;
   
- // console.log(req.body);
+ //console.log(req.body);
   try {
     const course = await Course.updateOne(
       {
@@ -68,9 +73,10 @@ export const UpdateCourse = async (req, res) => {
 
 export const DeleteCourse = async (req, res) => {
   const id = req.params.courseid;
+  console.log(req.params);
   const deleted = await Course.deleteOne({ _id: id });
-  if (deleted) res.send(201).json({ message: "Successfully Deleted !" });
-  else res.send(404).json({ error: "Error in Deletion of Block" });
+  if (deleted) res.status(201).json({ message: "Successfully Deleted !" });
+  else res.status(404).json({ error: "Error in Deletion of Block" });
 };
 
 export const getCourse = async (req, res) => {

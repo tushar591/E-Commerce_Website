@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../utils/utils.js";
 
 export default function Buy() {
   const courseId = useParams().courseid;
@@ -28,7 +29,7 @@ export default function Buy() {
       try {
         setloading(true);
         const response = await axios.post(
-          `http://localhost:4001/api/v1/course/buy/${courseId}`,
+          `${BACKEND_URL}/course/buy/${courseId}`,
           {},
           {
             headers: {
@@ -116,7 +117,7 @@ export default function Buy() {
       console.log("paymentInfo :", paymentInfo);
       try {
         const response = axios.post(
-          "http://localhost:4001/api/v1/order",
+          `${BACKEND_URL}/api/v1/order`,
           paymentInfo,
           {
             headers: {
@@ -125,7 +126,7 @@ export default function Buy() {
             withCredentials: true,
           }
         );
-        console.log(response);
+        //console.log(response);
       } catch (error) {
         console.log("Error occured while creating order", error);
         toast.error("Error occured while creating order");

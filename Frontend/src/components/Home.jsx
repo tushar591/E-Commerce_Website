@@ -12,38 +12,37 @@ import { use } from "react";
 import { toast } from "react-hot-toast";
 import Courses from "./Courses";
 import Coursesvdos from "./Coursesvdos";
+import { BACKEND_URL } from "../../utils/utils.js";
 
 export default function Home() {
   var [course, setCourse] = React.useState([]);
   var [loggedin, setLoggedIn] = React.useState(false);
 
   useEffect(() => {
-     if(localStorage.getItem("token")){
-       setLoggedIn(true);
-     }
-     else {
-       setLoggedIn(false);
-     }
-  },[]);
+    if (localStorage.getItem("token")) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, []);
 
-  const handlelogout = async ()=> {
+  const handlelogout = async () => {
     try {
-      const response = axios.get("http://localhost:4001/api/v1/user/logout", {
-        withCredentials: true,
-      })
-      console.log(response);
+      const response = await axios.post(`${BACKEND_URL}/admin/logout`);
+      localStorage.removeItem("token");
       toast.success("Successfully logged out");
       setLoggedIn(false);
     } catch (error) {
       toast.error("Error while logging out");
+      console.error("Logout error:", error);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4001/api/v1/course/courses",
+          `${BACKEND_URL}/course/courses`,
           {
             withCredentials: true,
           }
@@ -57,7 +56,7 @@ export default function Home() {
   }, []);
 
   var settings = {
-    vertical : false,
+    vertical: false,
     verticalSwiping: false,
     dots: true,
     infinite: true,
@@ -106,7 +105,7 @@ export default function Home() {
             </h1>
           </div>
           <div className="flex space-x-2 justify-center">
-            {(loggedin) ? (
+            {loggedin ? (
               <button
                 className="m-4 p-2 rounded text-center border bg-white text-black font-semibold hover:bg-red-600 hover:text-white"
                 onClick={handlelogout}
@@ -115,15 +114,24 @@ export default function Home() {
               </button>
             ) : (
               <div>
-                <Link to={"/login"} className="bg-transparent border-2 rounded p-1">
-              Login
-            </Link>
-            <Link
-              to={"/signup"}
-              className="bg-transparent border-2 rounded p-1"
-            >
-              Signup
-            </Link>
+                <Link
+                  to={"/login"}
+                  className="bg-transparent border-2 rounded p-1"
+                >
+                  Login
+                </Link>
+                <Link
+                  to={"/signup"}
+                  className="bg-transparent border-2 rounded p-1"
+                >
+                  Signup
+                </Link>
+                <Link
+                  to={"/admin/login"}
+                  className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                >
+                  Admin
+                </Link>
               </div>
             )}
           </div>
@@ -137,42 +145,47 @@ export default function Home() {
           <p className="text-gray-400 p-5">
             Upskill Yourself By Under The Guidance of Experts
           </p>
-          <Link to={"/courses"} className="mt-4 m-4 p-2 rounded text-center border bg-green-500 text-white font-semibold hover:bg-white hover:text-black">
+          <Link
+            to={"/courses"}
+            className="mt-4 m-4 p-2 rounded text-center border bg-green-500 text-white font-semibold hover:bg-white hover:text-black"
+          >
             Explore Courses
           </Link>
-          <Link to={"/coursesvdos"} className="m-4 p-2 rounded text-center border bg-white text-black font-semibold hover:bg-green-500 hover:text-white">
+          <Link
+            to={"/coursesvdos"}
+            className="m-4 p-2 rounded text-center border bg-white text-black font-semibold hover:bg-green-500 hover:text-white"
+          >
             Courses Videos
           </Link>
         </section>
 
         {/*SLIDER*/}
         <section>
-            <Slider {...settings}>
+          <Slider {...settings}>
             {course.map((item) => (
-            <div className="slider-container">
-              <div>
-                <div className="">
+              <div className="slider-container">
+                <div>
+                  <div className="">
                     <div key={item.id} className="p-4">
-                     <div className="bg-gray-800 rounded-lg oveflow-hidden relative flex-shrink-0 w-92 transition-transform duration-500">
-                     <img
-                        src={item.image}
-                        alt=""
-                        className="h-32 w-full object-contain"
-                      ></img>
-                      <div className="p-6 text-center">
-                        <h1>{item.title}</h1>
-                        <button className="m-4 p-2 rounded-full text-center border bg-orange-500 text-white font-semibold hover:bg-white hover:text-black">
-                          Enroll Now
-                        </button>
+                      <div className="bg-gray-800 rounded-lg oveflow-hidden relative flex-shrink-0 w-92 transition-transform duration-500">
+                        <img
+                          src={item.image}
+                          alt=""
+                          className="h-32 w-full object-contain"
+                        ></img>
+                        <div className="p-6 text-center">
+                          <h1>{item.title}</h1>
+                          <button className="m-4 p-2 rounded-full text-center border bg-orange-500 text-white font-semibold hover:bg-white hover:text-black">
+                            Enroll Now
+                          </button>
+                        </div>
                       </div>
-                     </div>
                     </div>
-                  
+                  </div>
                 </div>
               </div>
-          </div>
-          ))}
-            </Slider>
+            ))}
+          </Slider>
         </section>
 
         <hr></hr>

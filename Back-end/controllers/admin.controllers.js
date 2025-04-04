@@ -76,7 +76,7 @@ export const Login = async (req, res) => {
         config.JWT_ADMIN_PASSWORD
       );
       res.cookie("jwt", token);
-      return res.status(200).json({ message: "Login Successful", admin, token });
+      return res.status(200).json({ message: "Login Successful", Admin, token });
     }
   } catch (error) {
     return res.status(400).json({ error: "Error in MongoDB" });

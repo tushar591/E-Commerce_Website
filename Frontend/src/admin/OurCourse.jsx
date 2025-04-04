@@ -1,26 +1,27 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../../utils/utils.js";
 
 export default function OurCourse() {
-
-   const [loading, setLoading] = useState(true);
-   const [courses, setCourses] = useState([]);
-   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [courses, setCourses] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate();
+  const admin = JSON.parse(localStorage.getItem("admin"));
+  const token = admin?.token;
 
   useEffect(() => {
-      const token = localStorage.getItem("admin");
-      if (token) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-        toast.error("Please login first");
-        navigate("/admin/login");
-      }
-    }, []);
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+      toast.error("Please login first");
+      navigate("/admin/login");
+    }
+  }, []);
 
   //Fetch Courses
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function OurCourse() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:4001/api/v1/course/delete/${id}`,
+        `${BACKEND_URL}/course/delete/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
