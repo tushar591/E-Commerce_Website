@@ -14,11 +14,21 @@ dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookie());
-app.use(cors({ 
-  credentials: true, 
-  origin: "http://localhost:5173",  
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://e-commerce-website-ten-eta.vercel.app"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
 
 // app.use((req, res, next) => {
