@@ -6,7 +6,7 @@ A full-featured **MERN Stack** based E-Commerce **(CourseHeaven E-learning web a
 
 ## 🔗 Live Demo
 
-- 👨‍💻 **User Panel**: https://e-commerce-website-ten-eta.vercel.app/signup
+- 👨‍💻 **User Panel**: [https://e-commerce-website-ten-eta.vercel.app/signup]
 - 🛠️ **Admin Panel**: https://e-commerce-website-ten-eta.vercel.app/admin/signup
 
 ---
