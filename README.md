@@ -1,6 +1,6 @@
 # 🛍️ E-Commerce Website
 
-A full-featured **MERN Stack** based E-Commerce(CourseHeaven E-learning) web application that enables users to browse courses, Buy courses, register/login securely. Admins can mcreate course, edit, and delete courses through a dedicated dashboard.
+A full-featured **MERN Stack** based E-Commerce **(CourseHeaven E-learning web application)** that enables users to browse courses, Buy courses, register/login securely. Admins can mcreate course, edit, and delete courses through a dedicated dashboard.
 
 ---
 
