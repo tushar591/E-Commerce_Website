@@ -41,12 +41,9 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${BACKEND_URL}/course/courses`,
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(`${BACKEND_URL}/course/courses`, {
+          withCredentials: true,
+        });
         setCourse(response.data.courses);
       } catch (err) {
         console.log("Error occured while fetching Data", err);
@@ -175,9 +172,12 @@ export default function Home() {
                         ></img>
                         <div className="p-6 text-center">
                           <h1>{item.title}</h1>
-                          <button className="m-4 p-2 rounded-full text-center border bg-orange-500 text-white font-semibold hover:bg-white hover:text-black">
+                          <Link
+                            to={"/courses"}
+                            className="m-4 p-2 rounded-full text-center border bg-orange-500 text-white font-semibold hover:bg-white hover:text-black"
+                          >
                             Enroll Now
-                          </button>
+                          </Link>
                         </div>
                       </div>
                     </div>
