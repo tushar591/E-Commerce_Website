@@ -172,10 +172,10 @@ export default function Home() {
                         ></img>
                         <div className="p-6 text-center">
                           <h1>{item.title}</h1>
-                          <div>
+                          <div className="p-3">
                           <Link
                             to={"/courses"}
-                            className="m-4 mt-5 p-2 rounded-full text-center border bg-orange-500 text-white font-semibold hover:bg-white hover:text-black"
+                            className="m-4 p-2 rounded-full text-center border bg-orange-500 text-white font-semibold hover:bg-white hover:text-black"
                           >
                             Enroll Now
                           </Link>
