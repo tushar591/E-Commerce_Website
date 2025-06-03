@@ -2,28 +2,28 @@ import { Course } from "../models/course.model.js";
 import { Purchase } from "../models/purchase.model.js";
 import { admin } from "../models/admin.model.js";
 
-export const createCourse = async (req, res) => {
-  var { title, description, price, image,adminId } = req.body;
+export const createCourse = async (req, res) => {  
+  
+  var { title, description, price, imageUrl, adminId } = req.body;
+
   const Admin = await admin.findById(adminId);
   if (!Admin) {
     return res.status(404).json({ message: "Admin token not provided" });
   }
   try {
-    if(!image){
-       image = "img.jpg";
+    if (!imageUrl) {
+      return res.status(400).json({ error: "Image URL is required" });
     }
 
     if (!title || !description || !price ) {
       return res
         .status(400)
         .json({ error: "One of the fields is not provided" });
-    }
-
-    const courseData = {
+    }    const courseData = {
       title,
       description,
       price,
-      image,
+      image: imageUrl, // Store the image URL in the image field
       creatorId: adminId,
     };
 
@@ -45,20 +45,22 @@ export const UpdateCourse = async (req, res) => {
   const coursefound = await Course.find({ _id: new mongoose.Types.ObjectId(id) });
   if (!coursefound) {
     res.status(201).json({ message: "Course Not found" });
-  }
-  var { title, description, price, image } = req.body;
+  }  
   
- //console.log(req.body);
+  var { title, description, price, imageUrl } = req.body;
+  
+  if (!imageUrl) {
+    return res.status(400).json({ error: "Image URL is required" });
+  }
   try {
     const course = await Course.updateOne(
       {
         _id: id,
       },
-      {
-        title,
+      {        title,
         description,
         price,
-        image,
+        image: imageUrl,
       },
       {
         creatorId: AdminId,
