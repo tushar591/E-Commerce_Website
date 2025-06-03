@@ -57,7 +57,8 @@ export const UpdateCourse = async (req, res) => {
       {
         _id: id,
       },
-      {        title,
+      {        
+        title,
         description,
         price,
         image: imageUrl,
