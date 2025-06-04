@@ -11,12 +11,6 @@ import Slider from "react-slick";
 import { toast } from "react-hot-toast";
 import { BACKEND_URL } from "../../utils/utils.js";
 
-const mockCourses = [
-  { id: 1, title: "Course 1", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" },
-  { id: 2, title: "Course 2", image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" },
-  { id: 3, title: "Course 3", image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" },
-];
-
 export default function Home() {
   var [course, setCourse] = React.useState([]);
   var [loggedin, setLoggedIn] = React.useState(false);
@@ -164,7 +158,7 @@ export default function Home() {
         {/*SLIDER*/}
         <section>
           <Slider {...settings}>
-            {mockCourses.map((item) => (
+            {course.map((item) => (
               <div className="slider-container" key={item.id}>
                 <div className="p-4">
                   <div className="relative flex-shrink-0 transition-transform duration-500 bg-gray-800 rounded-lg oveflow-hidden w-92">
