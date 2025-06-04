@@ -182,18 +182,9 @@ export const DeleteCourse = async (req, res) => {
 export const getCourse = async (req, res) => {
   try {
     const courses = await Course.find({}).populate('creatorId', 'name email');
+
+    return courses.length > 0 ? res.status(200).json({message: "Courses fetched successfully", courses}) : res.status(204).json({message: 'No courses found', courses: []})
     
-    if (courses.length > 0) {
-      return res.status(200).json({ 
-        message: "Courses fetched successfully", 
-        courses 
-      });
-    } else {
-      return res.status(200).json({ 
-        message: "No courses found",
-        courses: []
-      });
-    }
   } catch (error) {
     console.error("Error fetching courses:", error);
     return res.status(500).json({ 
