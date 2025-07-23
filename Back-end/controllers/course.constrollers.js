@@ -1,29 +1,49 @@
 import { Course } from "../models/course.model.js";
 import { Purchase } from "../models/purchase.model.js";
 import { admin } from "../models/admin.model.js";
+import { v2 as cloudinary } from 'cloudinary';
 
 export const createCourse = async (req, res) => {
-  var { title, description, price, image,adminId } = req.body;
+  var { title, description, price, adminId } = req.body;
   const Admin = await admin.findById(adminId);
   if (!Admin) {
     return res.status(404).json({ message: "Admin token not provided" });
   }
   try {
-    if(!image){
-       image = "img.jpg";
-    }
-
     if (!title || !description || !price ) {
       return res
         .status(400)
         .json({ error: "One of the fields is not provided" });
     }
 
+    const { image } = req.files;
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).json({ errors: "No file uploaded" });
+    }
+
+    const allowedFormat = ["image/png", "image/jpeg"];
+    if (!allowedFormat.includes(image.mimetype)) {
+      return res
+        .status(400)
+        .json({ errors: "Invalid file format. Only PNG and JPG are allowed" });
+    }
+
+    const cloud_response = await cloudinary.uploader.upload(image.tempFilePath);
+    if (!cloud_response || cloud_response.error) {
+      return res
+        .status(400)
+        .json({ errors: "Error uploading file to cloudinary" });
+    }
+
+
     const courseData = {
       title,
       description,
       price,
-      image,
+      image: {
+        public_id: cloud_response.public_id,
+        url: cloud_response.url,
+      },
       creatorId: adminId,
     };
 
