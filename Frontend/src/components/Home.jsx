@@ -166,7 +166,7 @@ export default function Home() {
                     <div key={item.id} className="p-4">
                       <div className="bg-gray-800 rounded-lg oveflow-hidden relative flex-shrink-0 w-92 transition-transform duration-500">
                         <img
-                          src={item.image}
+                          src={item.image.url}
                           alt=""
                           className="h-32 w-full object-contain"
                         ></img>
