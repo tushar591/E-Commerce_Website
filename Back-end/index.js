@@ -9,6 +9,7 @@ import cookie from "cookie-parser";
 import cors from "cors";
 import { v2 as cloudinary } from "cloudinary";
 import fileUpload from "express-fileupload";
+import chatRoute from "./routes/chat.route.js";
 
 const app = express();
 dotenv.config();
@@ -61,6 +62,7 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/course", courseRoute);   
 app.use("/api/v1/admin", adminRoute);   
 app.use("/api/v1/order", orderRoute);
+app.use("/api/v1/chat", chatRoute);
    
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
