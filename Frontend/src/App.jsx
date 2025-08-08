@@ -14,6 +14,7 @@ import CourseCreate from './admin/CourseCreate'
 import Dashboard from './admin/Dashboard'
 import OurCourse from './admin/OurCourse'
 import UpdateCourse from './admin/UpdateCourse'
+import ChatAssistant from './components/Chatassitance/Chatassistance'
 
 function App() {
   return (
@@ -31,12 +32,12 @@ function App() {
       <Route path="/admin/dashboard" element={<Dashboard/>} />
       <Route path="/admin/our-courses" element={<OurCourse/>} />
       <Route path="/admin/update-course/:id" element={<UpdateCourse/>} />
-      
     </Routes>
+    <ChatAssistant />
     <Toaster></Toaster>
     </div>
 
   )
 }
 
-export default App
+export default App;
